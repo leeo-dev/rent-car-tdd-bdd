@@ -61,6 +61,12 @@ describe("Suite Test CarService", () => {
     const customer = Object.create(mocks.validCustomer);
     customer.age = 50;
     const carCategory = Object.create(mocks.validCarCategory);
-    carCategory.price = 37.5;
+    carCategory.price = 37.6;
+    const numbersOfDay = 5;
+    const result = carService.calculateFinalPrice({
+      customer,
+      carCategory,
+      numbersOfDay,
+    });
   });
 });
