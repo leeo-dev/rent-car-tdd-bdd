@@ -63,10 +63,12 @@ describe("Suite Test CarService", () => {
     const carCategory = Object.create(mocks.validCarCategory);
     carCategory.price = 37.6;
     const numbersOfDay = 5;
+    const expected = carService.currencyFormat.format(244.4);
     const result = carService.calculateFinalPrice({
       customer,
       carCategory,
       numbersOfDay,
     });
+    expect(result).to.be.deep.equal(expected);
   });
 });
