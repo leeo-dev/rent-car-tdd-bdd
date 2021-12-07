@@ -4,6 +4,7 @@ const sinon = require("sinon");
 
 const CarService = require("../../src/service/carService");
 const { join } = require("path");
+const Transaction = require("../../src/entities/transaction");
 
 const mocks = {
   validCarCategory: require("../Mocks/valid-carCategory.json"),
@@ -70,5 +71,33 @@ describe("Suite Test CarService", () => {
       numbersOfDay,
     });
     expect(result).to.be.deep.equal(expected);
+  });
+  it("Give an customer and a car category it should return a transaction receipt", async () => {
+    const car = mocks.validCar;
+    const carCategory = {
+      ...mocks.validCarCategory,
+      price: 37.6,
+      carIds: [car.id],
+    };
+    const now = new Date(2021, 10, 5);
+    sandbox.useFakeTimers(now.getTime());
+    const customer = Object.create(mocks.validCustomer);
+    customer.age = 50;
+    const numbersOfDay = 5;
+    const dueDate = "10 de novembro de 2021";
+    const expectedAmount = carService.calculateFinalPrice({
+      customer,
+      carCategory,
+      numbersOfDay,
+    });
+    const expected = new Transaction({
+      customer,
+      car,
+      amount: expectedAmount,
+      dueDate,
+    });
+
+    const result = await carService.rent(customer, carCategory, numbersOfDay);
+    expect(JSON.stringify(result)).to.be.equal(JSON.stringify(expected));
   });
 });
